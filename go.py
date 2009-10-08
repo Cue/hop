@@ -79,10 +79,22 @@ def command_remove(options, args, db):
 			print "No shortcut named '%s' exists." % shortcut
 	print "Removed %d shortcuts." % count
 	return True
+
+
+def command_autocomplete(options, args, db):
+	"""Returns a list of shortcut names that start with the last argument"""
+	prefix = ''
+	if args:
+		prefix = args[-1]
+	for shortcut in db.keys():
+		if shortcut.startswith(prefix):
+			print shortcut
+	return True
+
 	
-		
 commands = {
 	'add': command_add,
+	'autocomplete': command_autocomplete,
 	'go': command_go,
 	'remove': command_remove
 }
@@ -109,6 +121,12 @@ if __name__ == "__main__":
 										const="remove",
 	                  help="remove shortcuts with the given names")
 	parser.add_option_group(group)
+	
+	parser.add_option("--autocomplete",
+										dest="command",
+										action="append_const",
+										const="autocomplete",
+										help=optparse.SUPPRESS_HELP)
 
 	if len(sys.argv) == 1:
 		parser.print_help()
