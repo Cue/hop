@@ -38,7 +38,7 @@ def command_add(options, args, db):
 		if os.path.isdir(path):
 			name = options.add_as or basename(path)
 			if name not in db:
-				print "Adding '%s' as '%s'" % (path, name)
+				print "Adding '%s' as '%s'." % (path, name)
 				db[name] = path
 			elif db[name] != path:
 				print "A shortcut for '%s' already exists.  Use go -r '%s' to remove it" % (name, name)
@@ -54,25 +54,42 @@ def command_add(options, args, db):
 
 
 def command_go(options, args, db):
+	"""Prints the name of the directory implied by the shortcut."""
 	if len(args) != 1:
 		return False
 	
 	if args[0] in db:
+		# Prints the path to cd to, go.sh actually performs the cd.
 		print db[args[0]]
 		sys.exit(255)
 	
-	print "No shortcut named '%s' found." % args[0]
-	# TODO(robbyw): Perform the GO
+	print "No shortcut named '%s' exists." % args[0]
+	return True
+
+
+def command_remove(options, args, db):
+	"""Removes the named shortcut from the set of shortcuts."""
+	count = 0
+	for shortcut in args:
+		if shortcut in db:
+			del db[shortcut]
+			print "Removed shortcut '%s'." % shortcut
+			count += 1
+		else:
+			print "No shortcut named '%s' exists." % shortcut
+	print "Removed %d shortcuts." % count
+	return True
 	
 		
 commands = {
 	'add': command_add,
-	'go': command_go
+	'go': command_go,
+	'remove': command_remove
 }
 
 
 if __name__ == "__main__":
-	parser = optparse.OptionParser(usage="usage: %prog [options] [directories]")
+	parser = optparse.OptionParser(usage="usage: %prog [options] [directories/shortcuts]")
 	
 	group = optparse.OptionGroup(parser, "Adding paths")
 	group.add_option("-a", "--add",
@@ -83,6 +100,14 @@ if __name__ == "__main__":
 	group.add_option("--as",
 										dest="add_as",
 										help="specify a custom NAME for the new shortcut. Only works when creating only 1 shortcut.")
+	parser.add_option_group(group)
+	
+	group = optparse.OptionGroup(parser, "Removing paths")
+	group.add_option("-r", "--remove",
+										dest="command",
+										action="append_const",
+										const="remove",
+	                  help="remove shortcuts with the given names")
 	parser.add_option_group(group)
 
 	if len(sys.argv) == 1:
