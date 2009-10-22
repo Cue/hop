@@ -101,7 +101,7 @@ commands = {
 
 
 if __name__ == "__main__":
-	parser = optparse.OptionParser(usage="usage: %prog [options] [directories/shortcuts]")
+	parser = optparse.OptionParser(usage="usage: go [options] [directories/shortcuts]")
 	
 	group = optparse.OptionGroup(parser, "Adding paths")
 	group.add_option("-a", "--add",
@@ -129,6 +129,7 @@ if __name__ == "__main__":
 										help=optparse.SUPPRESS_HELP)
 
 	if len(sys.argv) == 1:
+		# Print the help when called with no arguments.
 		parser.print_help()
 		sys.exit(0)
 		
