@@ -3,11 +3,23 @@
 GO_PATH=$(cd `dirname $BASH_SOURCE` && pwd)
 alias go=". $GO_PATH/go.sh"
 
+_has_subdirectory()
+{
+	for subpath in $1/*; do
+		[ -d "$subpath" ] && return 0
+	done
+	return 1
+}
+
 _add_slashes()
 {
 	local i index=0
 	for i in ${COMPREPLY[@]}; do
-		COMPREPLY[index++]="$i/"
+		if _has_subdirectory $i; then
+			COMPREPLY[index++]="$i/"
+		else
+			COMPREPLY[index++]="$i "
+		fi		
 	done
 }
 
