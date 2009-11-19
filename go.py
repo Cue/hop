@@ -91,19 +91,27 @@ def command_autocomplete(options, args, db):
 			print shortcut
 	return True
 
+
+def command_list(options, args, db):
+	"""Lists the available shortcuts."""
+	for shortcut in sorted(db.keys()):
+		print "%s => %s" % (shortcut, db[shortcut])
+	return True
+
 	
 commands = {
 	'add': command_add,
 	'autocomplete': command_autocomplete,
 	'go': command_go,
-	'remove': command_remove
+	'remove': command_remove,
+	'list': command_list
 }
 
 
 if __name__ == "__main__":
 	parser = optparse.OptionParser(usage="usage: go [options] [directories/shortcuts]")
 	
-	group = optparse.OptionGroup(parser, "Adding paths")
+	group = optparse.OptionGroup(parser, "Adding shortcuts")
 	group.add_option("-a", "--add",
 										dest="command",
 										action="append_const",
@@ -114,13 +122,21 @@ if __name__ == "__main__":
 										help="specify a custom NAME for the new shortcut. Only works when creating only 1 shortcut.")
 	parser.add_option_group(group)
 	
-	group = optparse.OptionGroup(parser, "Removing paths")
+	group = optparse.OptionGroup(parser, "Removing shortcuts")
 	group.add_option("-r", "--remove",
 										dest="command",
 										action="append_const",
 										const="remove",
 	                  help="remove shortcuts with the given names")
 	parser.add_option_group(group)
+	
+	group = optparse.OptionGroup(parser, "Listing available shortcuts")
+	group.add_option("-l", "--list",
+	                 dest="command",
+									 action="append_const",
+									 const="list",
+									 help="list all shortcuts")
+	parser.add_option_group(group)	
 	
 	parser.add_option("--autocomplete",
 										dest="command",
