@@ -1,7 +1,7 @@
 #!/bin/bash
 
-GO_PATH=$(cd `dirname $BASH_SOURCE` && pwd)
-alias go=". $GO_PATH/go.sh"
+HOP_PATH=$(cd `dirname $BASH_SOURCE` && pwd)
+alias hop=". $HOP_PATH/hop.sh"
 
 _has_subdirectory()
 {
@@ -23,7 +23,7 @@ _add_slashes()
 	done
 }
 
-_go_complete()
+_hop_complete()
 {
 	local cur prev
 	COMPREPLY=()
@@ -35,9 +35,9 @@ _go_complete()
 		COMPREPLY=( $(compgen -d -- ${cur}) )
 		_add_slashes
 	else
-		COMPREPLY=( $( compgen -W "`go --autocomplete $cur`" -- ${cur} ) )
+		COMPREPLY=( $( compgen -W "`hop --autocomplete $cur`" -- ${cur} ) )
 	fi
 	return 0
 }
 
-complete -F _go_complete -o nospace go
+complete -F _hop_complete -o nospace hop

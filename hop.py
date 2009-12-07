@@ -2,7 +2,7 @@
 #
 # Copyright 2009, Robby Walker
 #
-# go/go.py
+# hop/hop.py
 # The directory shortcut command.
 
 
@@ -41,7 +41,7 @@ def command_add(options, args, db):
 				print "Adding '%s' as '%s'." % (path, name)
 				db[name] = path
 			elif db[name] != path:
-				print "A shortcut for '%s' already exists.  Use go -r '%s' to remove it" % (name, name)
+				print "A shortcut for '%s' already exists.  Use hop -r '%s' to remove it" % (name, name)
 			else:
 				print "No change to '%s'." % name
 			
@@ -53,13 +53,13 @@ def command_add(options, args, db):
 	return True
 
 
-def command_go(options, args, db):
+def command_hop(options, args, db):
 	"""Prints the name of the directory implied by the shortcut."""
 	if len(args) != 1:
 		return False
 	
 	if args[0] in db:
-		# Prints the path to cd to, go.sh actually performs the cd.
+		# Prints the path to cd to, hop.sh actually performs the cd.
 		print db[args[0]]
 		sys.exit(255)
 	
@@ -102,14 +102,14 @@ def command_list(options, args, db):
 commands = {
 	'add': command_add,
 	'autocomplete': command_autocomplete,
-	'go': command_go,
+	'hop': command_hop,
 	'remove': command_remove,
 	'list': command_list
 }
 
 
 if __name__ == "__main__":
-	parser = optparse.OptionParser(usage="usage: go [options] [directories/shortcuts]")
+	parser = optparse.OptionParser(usage="usage: hop [options] [directories/shortcuts]")
 	
 	group = optparse.OptionGroup(parser, "Adding shortcuts")
 	group.add_option("-a", "--add",
@@ -152,8 +152,8 @@ if __name__ == "__main__":
 	(options, args) = parser.parse_args()
 	
 	if not options.command or not len(options.command):
-		# It's a request to go somewhere.
-		command = 'go'
+		# It's a request to hop somewhere.
+		command = 'hop'
 		
 	elif len(options.command) > 1:
 		# The user has specified multiple commands.
@@ -164,7 +164,7 @@ if __name__ == "__main__":
 		command = options.command[0]
 
 	if command in commands:
-		db = anydbm.open(os.path.expanduser('~/.go'), 'c')
+		db = anydbm.open(os.path.expanduser('~/.hop'), 'c')
 		if not commands[command](options, args, db):
 			parser.print_help()
 	else:
