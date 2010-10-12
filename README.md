@@ -2,7 +2,6 @@ hop
 ================
 
 A script to make navigating to common directories easy
-----------------
 
 Copyright 2010 by Pipelime, Inc.
 
