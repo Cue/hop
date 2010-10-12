@@ -23,6 +23,21 @@ def basename(path):
 		return os.path.basename(dir)
 
 
+def command_add_server(options, args, db):
+	"""Adds a server to the set of shortcuts."""
+	server = args[0]
+	store_as = '$server$%s' % server
+	name = options.add_as or server
+	if name not in db:
+		print "Adding '%s' as '%s'." % (server, name)
+		db[name] = store_as
+	elif db[name] != store_as:
+		print "A shortcut for '%s' already exists.  Use hop -r '%s' to remove it" % (name, name)
+	else:
+		print "No change to '%s'." % name	
+	return True
+
+
 def command_add(options, args, db):
 	"""Adds one or more directories to the set of shortcuts."""
 	if not args:
@@ -59,9 +74,14 @@ def command_hop(options, args, db):
 		return False
 	
 	if args[0] in db:
-		# Prints the path to cd to, hop.sh actually performs the cd.
-		print db[args[0]]
-		sys.exit(255)
+		# Prints the path to cd / ssh to, hop.sh actually performs the cd.
+		value = db[args[0]]
+		if value.startswith('$server$'):
+			print value[8:]
+			sys.exit(254)
+		else:
+			print db[args[0]]
+			sys.exit(255)
 	
 	print "No shortcut named '%s' exists." % args[0]
 	return True
@@ -101,6 +121,7 @@ def command_list(options, args, db):
 	
 commands = {
 	'add': command_add,
+	'add_server': command_add_server,
 	'autocomplete': command_autocomplete,
 	'hop': command_hop,
 	'remove': command_remove,
@@ -113,36 +134,44 @@ def main():
 	
 	group = optparse.OptionGroup(parser, "Adding shortcuts")
 	group.add_option("-a", "--add",
-										dest="command",
-										action="append_const",
-										const="add",
-	                  help="add shortcuts to the given directories.  when none are given, adds a shortcut to the current directory")
+                     dest="command",
+                     action="append_const",
+                     const="add",
+                     help="add shortcuts to the given directories.  when none are given, adds a shortcut to the current directory")
 	group.add_option("--as",
-										dest="add_as",
-										help="specify a custom NAME for the new shortcut. Only works when creating only 1 shortcut.")
+                     dest="add_as",
+                     help="specify a custom NAME for the new shortcut. Only works when creating only 1 shortcut.")
+	parser.add_option_group(group)
+	
+	group = optparse.OptionGroup(parser, "Adding SSH shortcuts")
+	group.add_option("-s", "--add-server",
+                     dest="command",
+                     action="append_const",
+                     const="add_server",
+                     help="add shortcuts to the given server. Can be used with --as (see above)")
 	parser.add_option_group(group)
 	
 	group = optparse.OptionGroup(parser, "Removing shortcuts")
 	group.add_option("-r", "--remove",
-										dest="command",
-										action="append_const",
-										const="remove",
-	                  help="remove shortcuts with the given names")
+                     dest="command",
+                     action="append_const",
+                     const="remove",
+                     help="remove shortcuts with the given names")
 	parser.add_option_group(group)
 	
 	group = optparse.OptionGroup(parser, "Listing available shortcuts")
 	group.add_option("-l", "--list",
 	                 dest="command",
-									 action="append_const",
-									 const="list",
-									 help="list all shortcuts")
+                     action="append_const",
+                     const="list",
+                     help="list all shortcuts")
 	parser.add_option_group(group)	
 	
 	parser.add_option("--autocomplete",
-										dest="command",
-										action="append_const",
-										const="autocomplete",
-										help=optparse.SUPPRESS_HELP)
+                     dest="command",
+                     action="append_const",
+                     const="autocomplete",
+                     help=optparse.SUPPRESS_HELP)
 
 	if len(sys.argv) == 1:
 		# Print the help when called with no arguments.
