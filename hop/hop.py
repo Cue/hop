@@ -1,9 +1,8 @@
 #!/usr/bin/python
 #
-# Copyright 2009, Robby Walker
+# Copyright 2010, Pipelime, Inc.
 #
 # hop/hop.py
-# The directory shortcut command.
 
 
 import anydbm
@@ -12,6 +11,11 @@ import optparse
 import os
 import os.path
 import sys
+
+try:
+	import json
+except ImportError:
+	import simple_json as json
 
 
 def basename(path):
@@ -35,6 +39,21 @@ def command_add_server(options, args, db):
 		print "A shortcut for '%s' already exists.  Use hop -r '%s' to remove it" % (name, name)
 	else:
 		print "No change to '%s'." % name	
+	return True
+
+
+def command_add_server_json(options, args, db):
+	"""Adds a server to the set of shortcuts."""
+	servers = json.loads(file(args[0]).read())
+	for name, server in servers.items():
+		store_as = '$server$%s' % server
+		if name not in db:
+			print "Adding '%s' as '%s'." % (server, name)
+			db[name] = store_as
+		elif db[name] != store_as:
+			print "A shortcut for '%s' already exists.  Use hop -r '%s' to remove it" % (name, name)
+		else:
+			print "No change to '%s'." % name	
 	return True
 
 
@@ -123,6 +142,7 @@ def command_list(options, args, db):
 commands = {
 	'add': command_add,
 	'add_server': command_add_server,
+	'add_server_json': command_add_server_json,
 	'autocomplete': command_autocomplete,
 	'hop': command_hop,
 	'remove': command_remove,
@@ -149,7 +169,15 @@ def main():
                      dest="command",
                      action="append_const",
                      const="add_server",
-                     help="add shortcuts to the given server. Can be used with --as (see above)")
+                     help="add shortcut to the given server. Can be used with --as (see above)")
+	parser.add_option_group(group)
+
+	group = optparse.OptionGroup(parser, "Adding multiple SSH shortcuts")
+	group.add_option("-S", "--add-server-json",
+                     dest="command",
+                     action="append_const",
+                     const="add_server_json",
+                     help="add shortcuts to the given servers.")
 	parser.add_option_group(group)
 	
 	group = optparse.OptionGroup(parser, "Removing shortcuts")

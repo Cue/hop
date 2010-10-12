@@ -31,7 +31,10 @@ _hop_complete()
 	prev="${COMP_WORDS[COMP_CWORD-1]}"
 	
 	# TODO(robbywalker): Autocomplete of options when cur starts with -
-	if [ "$prev" == "-a" ] || [ "$prev" == "--add" ]; then
+	if [ "$prev" == "-S" ] || [ "$prev" == "--add-server-json" ]; then
+		COMPREPLY=( $(compgen -f -- ${cur}) )
+		_add_slashes
+	elif [ "$prev" == "-a" ] || [ "$prev" == "--add" ]; then
 		COMPREPLY=( $(compgen -d -- ${cur}) )
 		_add_slashes
 	else
