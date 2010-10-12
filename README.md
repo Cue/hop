@@ -18,5 +18,9 @@ Usage
 	hop -a /var/vhosts/mysite.com
 	hop mysite.com
 	hop m<tab>
+
 	hop -a /var/vhosts/myothersite.com --as mos
 	hop mos
+	
+	hop -s user@externalsite.com --as ext
+	hop ext
