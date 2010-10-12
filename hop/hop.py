@@ -108,7 +108,7 @@ commands = {
 }
 
 
-if __name__ == "__main__":
+def main():
 	parser = optparse.OptionParser(usage="usage: hop [options] [directories/shortcuts]")
 	
 	group = optparse.OptionGroup(parser, "Adding shortcuts")
