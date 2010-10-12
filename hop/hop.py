@@ -74,7 +74,8 @@ def command_hop(options, args, db):
 		return False
 	
 	if args[0] in db:
-		# Prints the path to cd / ssh to, hop.sh actually performs the cd.
+		# Prints the name and path to cd / ssh to, hop.sh actually performs the cd or ssh.
+		print args[0]
 		value = db[args[0]]
 		if value.startswith('$server$'):
 			print value[8:]
