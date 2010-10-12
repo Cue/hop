@@ -20,7 +20,3 @@ Usage
 	hop m<tab>
 	hop -a /var/vhosts/myothersite.com --as mos
 	hop mos
-
-More information and source code can be found at
-
-http://github.com/robbywalker/hop
