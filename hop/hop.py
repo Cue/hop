@@ -86,23 +86,38 @@ def command_add(options, args, db):
 	print "Created %d new shortcuts." % count
 	return True
 
+def beginning_with(cmd, db):
+        """Returns a list of commands that begin with the string cmd"""
+        possibilities = [];
+        for shortcut in db.keys():
+                if shortcut.startswith(cmd):
+                        possibilities.append(shortcut)
+        return possibilities
 
 def command_hop(options, args, db):
 	"""Prints the name of the directory implied by the shortcut."""
 	if len(args) != 1:
 		return False
 	
-	if args[0] in db:
+        shortcut = False
+        if args[0] in db:
+                shortcut = args[0]
+        else:
+                possibilities = beginning_with(args[0], db)
+                if len(possibilities) == 1:
+                        shortcut = possibilities[0]
+
+	if shortcut:
 		# Prints the name and path to cd / ssh to, hop.sh actually performs the cd or ssh.
-		print args[0]
-		value = db[args[0]]
+		print shortcut
+		value = db[shortcut]
 		if value.startswith('$server$'):
 			print value[8:]
 			sys.exit(254)
 		else:
-			print db[args[0]]
+			print db[shortcut]
 			sys.exit(255)
-	
+
 	print "No shortcut named '%s' exists." % args[0]
 	return True
 
@@ -126,9 +141,8 @@ def command_autocomplete(options, args, db):
 	prefix = ''
 	if args:
 		prefix = args[-1]
-	for shortcut in db.keys():
-		if shortcut.startswith(prefix):
-			print shortcut
+	for shortcut in beginning_with(prefix, db):
+                print shortcut
 	return True
 
 
