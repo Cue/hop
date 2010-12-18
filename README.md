@@ -15,12 +15,19 @@ Installation
 Usage
 -----------------
 
+    # Add a dir
 	hop -a /var/vhosts/mysite.com
+    # Jump by basename
 	hop mysite.com
-	hop m<tab>
+    # Tab complete
+	hop m<tab> => hop mysite.com
+    # Or just use the shortest unique prefix (a la git)
+    hop m
 
+    # Use custom aliases
 	hop -a /var/vhosts/myothersite.com --as mos
 	hop mos
 	
+    # Add ssh shortcuts
 	hop -s user@externalsite.com --as ext
 	hop ext
