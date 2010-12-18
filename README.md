@@ -17,10 +17,13 @@ Usage
 
     # Add a dir
 	hop -a /var/vhosts/mysite.com
+
     # Jump by basename
 	hop mysite.com
+
     # Tab complete
 	hop m<tab> => hop mysite.com
+
     # Or just use the shortest unique prefix (a la git)
     hop m
 
