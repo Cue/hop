@@ -15,7 +15,7 @@ Due to the fact that hop must modify your bash settings to work, at this time it
 
   cd hop
 
-	python setup.py install
+  python setup.py install
 
 If you do not have a virtualenv set up, you may need to run the last command using 'sudo'.
 
@@ -25,18 +25,25 @@ It's also only compatible with bash at this time.  Pull requests welcome.
 Usage
 -----------------
 
-	hop -a /var/vhosts/mysite.com
-	hop mysite.com
-	hop m<tab>
+  # Add a dir
+  hop -a /var/vhosts/mysite.com
 
-	hop -a /var/vhosts/myothersite.com --as mos
-	hop mos
+  # Jump by basename
+  hop mysite.com
 
-	hop -s user@externalsite.com --as ext
-	hop ext
+  # Tab complete
+  hop m<tab>
 
-	hop -a /try/just/using/a/unique/prefix
-	hop p
+  # Or just use the shortest unique prefix (a la git)
+  hop m
+
+  # Use custom aliases
+  hop -a /var/vhosts/myothersite.com --as mos
+  hop mos
+
+  # Add ssh shortcuts
+  hop -s user@externalsite.com --as ext
+  hop ext
 
 
 Authors
