@@ -4,14 +4,13 @@ import os.path
 import sys
 
 from setuptools import setup
-from setuptools.command import install
 from distutils.command import install_data
 
 
 class hop_install(install_data.install_data):
 	def run(self):
 		install_data.install_data.run(self)
-		
+
 		bashrc_path = os.path.expanduser("~/.bashrc")
 
 		# First check if the reference to hop.bash is already installed.
@@ -33,7 +32,7 @@ class hop_install(install_data.install_data):
 
 		print
 		print "Done.  Now type '. ~/.bashrc'.  Then type 'hop'."
-		
+
 		return True
 
 
@@ -51,5 +50,5 @@ setup(name='Hop',
 		  'hop-script = hop.hop:main'
         ]
       },
-      cmdclass=dict(install_hop=hop_install)
+      cmdclass=dict(install_data=hop_install)
      )
