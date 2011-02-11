@@ -1,12 +1,19 @@
-#!/usr/bin/python
+#!/usr/bin/env python
+# Copyright 2011 The hop Authors.
 #
-# Copyright 2010, Pipelime, Inc.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
-# hop/hop.py
-
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 import anydbm
-import errno
 import optparse
 import os
 import os.path
@@ -38,7 +45,7 @@ def command_add_server(options, args, db):
 	elif db[name] != store_as:
 		print "A shortcut for '%s' already exists.  Use hop -r '%s' to remove it" % (name, name)
 	else:
-		print "No change to '%s'." % name	
+		print "No change to '%s'." % name
 	return True
 
 
@@ -53,7 +60,7 @@ def command_add_server_json(options, args, db):
 		elif db[name] != store_as:
 			print "A shortcut for '%s' already exists.  Use hop -r '%s' to remove it" % (name, name)
 		else:
-			print "No change to '%s'." % name	
+			print "No change to '%s'." % name
 	return True
 
 
@@ -61,11 +68,11 @@ def command_add(options, args, db):
 	"""Adds one or more directories to the set of shortcuts."""
 	if not args:
 		args = ['']
-	
+
 	if len(args) > 1 and options.add_as:
 		print "--as cannot be specified for more than one path"
 		sys.exit(1)
-	
+
 	count = 0
 	for subdir in args:
 		path = os.path.join(os.getcwd(), subdir)
@@ -78,7 +85,7 @@ def command_add(options, args, db):
 				print "A shortcut for '%s' already exists.  Use hop -r '%s' to remove it" % (name, name)
 			else:
 				print "No change to '%s'." % name
-			
+
 			count += 1
 		else:
 			print "'%s' is not a directory.  Ignoring." % path
@@ -98,7 +105,7 @@ def command_hop(options, args, db):
 	"""Prints the name of the directory implied by the shortcut."""
 	if len(args) != 1:
 		return False
-	
+
         shortcut = False
         if args[0] in db:
                 shortcut = args[0]
@@ -152,7 +159,7 @@ def command_list(options, args, db):
 		print "%s => %s" % (shortcut, db[shortcut])
 	return True
 
-	
+
 commands = {
 	'add': command_add,
 	'add_server': command_add_server,
@@ -166,7 +173,7 @@ commands = {
 
 def main():
 	parser = optparse.OptionParser(usage="usage: hop [options] [directories/shortcuts]")
-	
+
 	group = optparse.OptionGroup(parser, "Adding shortcuts")
 	group.add_option("-a", "--add",
                      dest="command",
@@ -177,7 +184,7 @@ def main():
                      dest="add_as",
                      help="specify a custom NAME for the new shortcut. Only works when creating only 1 shortcut.")
 	parser.add_option_group(group)
-	
+
 	group = optparse.OptionGroup(parser, "Adding SSH shortcuts")
 	group.add_option("-s", "--add-server",
                      dest="command",
@@ -193,7 +200,7 @@ def main():
                      const="add_server_json",
                      help="add shortcuts to the given servers.")
 	parser.add_option_group(group)
-	
+
 	group = optparse.OptionGroup(parser, "Removing shortcuts")
 	group.add_option("-r", "--remove",
                      dest="command",
@@ -201,15 +208,15 @@ def main():
                      const="remove",
                      help="remove shortcuts with the given names")
 	parser.add_option_group(group)
-	
+
 	group = optparse.OptionGroup(parser, "Listing available shortcuts")
 	group.add_option("-l", "--list",
 	                 dest="command",
                      action="append_const",
                      const="list",
                      help="list all shortcuts")
-	parser.add_option_group(group)	
-	
+	parser.add_option_group(group)
+
 	parser.add_option("--autocomplete",
                      dest="command",
                      action="append_const",
@@ -220,18 +227,18 @@ def main():
 		# Print the help when called with no arguments.
 		parser.print_help()
 		sys.exit(0)
-		
+
 	(options, args) = parser.parse_args()
-	
+
 	if not options.command or not len(options.command):
 		# It's a request to hop somewhere.
 		command = 'hop'
-		
+
 	elif len(options.command) > 1:
 		# The user has specified multiple commands.
 		print "Only one command can be run at a time.  You specified [%s]" % (','.join(options.command))
 		sys.exit(1)
-	
+
 	else:
 		command = options.command[0]
 
@@ -241,4 +248,4 @@ def main():
 			parser.print_help()
 	else:
 		print "Unknown command: %s" % command
-	
+
