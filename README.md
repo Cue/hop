@@ -1,7 +1,7 @@
 hop
 ================
 
-Navigate to common directories more easily.
+Quickly navigate to common directories.
 
 Copyright 2011 by The hop Authors.
 
