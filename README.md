@@ -17,6 +17,8 @@ Due to the fact that hop must modify your bash settings to work, at this time it
 
     python setup.py install
 
+    python setup.py install_data
+
 If you do not have a virtualenv set up, you may need to run the last command using 'sudo'.
 
 It's also only compatible with bash at this time.  Pull requests welcome.
