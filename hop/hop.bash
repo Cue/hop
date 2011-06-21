@@ -14,8 +14,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-HOP_PATH=$(cd `dirname $BASH_SOURCE` && pwd)
-alias hop=". $HOP_PATH/hop.sh"
+function hop
+{
+HOP_PATH=`dirname $BASH_SOURCE`
+PATH_OR_OUTPUT=`hop-script $*`
+case $? in
+  255 )
+    read THE_NAME THE_PATH <<<$PATH_OR_OUTPUT
+    echo -ne "\033]0;"$THE_NAME"\007"
+    cd $THE_PATH
+    ;;
+  254 )
+    read THE_NAME THE_SERVER <<<$PATH_OR_OUTPUT
+    echo -ne "\033]0;"$THE_NAME"\007"
+    ssh $THE_SERVER
+    ;;
+  *)
+    echo "$PATH_OR_OUTPUT"
+    ;;
+esac
+}
+
 
 _has_subdirectory()
 {
