@@ -20,9 +20,9 @@ import os.path
 import sys
 
 try:
-	import json
+	import simplejson as json
 except ImportError:
-	import simple_json as json
+	import json
 
 
 def basename(path):
