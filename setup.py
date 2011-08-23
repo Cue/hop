@@ -24,7 +24,10 @@ class hop_install(install_data.install_data):
 	def run(self):
 		install_data.install_data.run(self)
 
-		bashrc_path = os.path.expanduser("~/.bashrc")
+	        if sys.platform == "darwin":
+	            bashrc_path = os.path.expanduser("~/.bash_profile")
+	        else:
+	            bashrc_path = os.path.expanduser("~/.bashrc")
 
 		# First check if the reference to hop.bash is already installed.
 		bashrc = open(bashrc_path, "r")
