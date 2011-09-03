@@ -19,11 +19,6 @@ import os
 import os.path
 import sys
 
-try:
-	import simplejson as json
-except ImportError:
-	import json
-
 
 def basename(path):
 	"""Always returns a basename, even if a path ends with a slash."""
@@ -51,6 +46,12 @@ def command_add_server(options, args, db):
 
 def command_add_server_json(options, args, db):
 	"""Adds a server to the set of shortcuts."""
+
+	try:
+		import simplejson as json
+	except ImportError:
+		import json
+
 	servers = json.loads(file(args[0]).read())
 	for name, server in servers.items():
 		store_as = '$server$%s' % server
