@@ -21,35 +21,37 @@ from distutils.command import install_data
 
 
 class hop_install(install_data.install_data):
-	def run(self):
-		install_data.install_data.run(self)
+  def run(self):
+    install_data.install_data.run(self)
 
-	        if sys.platform == "darwin":
-	            bashrc_path = os.path.expanduser("~/.bash_profile")
-	        else:
-	            bashrc_path = os.path.expanduser("~/.bashrc")
+    if sys.platform == "darwin":
+      bashrc_path = os.path.expanduser("~/.bash_profile")
+    else:
+      bashrc_path = os.path.expanduser("~/.bashrc")
 
-		# First check if the reference to hop.bash is already installed.
-		bashrc = open(bashrc_path, "r")
-		for line in bashrc:
-			if line.find('/hop.bash') != -1:
-				return
-		bashrc.close()
+    prefix = os.path.join(sys.prefix, 'hop')
+    required_commands = {
+      '/hop.bash':"# Initialize the 'hop' script\n source %s" % os.path.join(prefix, 'hop.bash'),
+      'hop-lua-script':'# Define an entry point for the lua script version of hop\n'
+                       'alias hop-lua-script="LUA_PATH=%s %s"' % (os.path.join(prefix, 'json.lua'),
+                                                                  os.path.join(prefix, 'hop.lua'))
+    }
+    # First check if the reference to hop.bash is already installed.
+    with open(bashrc_path, "r") as f:
+      bashrc_content = f.read()
+      for k in required_commands.keys():
+        if k in bashrc_content:
+          del required_commands[k]
 
-		# If not, install the reference to hop.bash.
-		source_command = 'source %s' % os.path.join(sys.prefix, 'hop', 'hop.bash')
-		bashrc = open(bashrc_path, "a")
-		bashrc.writelines([
-			"\n",
-			"# Initialize the 'hop' script\n",
-			source_command,
-			"\n"])
-		bashrc.close()
+    if required_commands:
+      with open(bashrc_path, "a") as f:
+        for v in required_commands.values():
+          f.write(v + '\n')
 
-		print
-		print "Done.  Now type '. ~/.bashrc'.  Then type 'hop'."
+    print
+    print "Done.  Now type '. ~/.bashrc'.  Then type 'hop'."
 
-		return True
+    return True
 
 
 setup(name='Hop',
@@ -60,10 +62,10 @@ setup(name='Hop',
       author_email='robbyw@greplin.com',
       url='http://www.github.com/Greplin/hop',
       packages=['hop'],
-      data_files=[('hop', ['hop/hop.bash', 'hop/hop.sh'])],
+      data_files=[('hop', ['hop/hop.bash', 'hop/hop.sh', 'hop/hop.lua', 'hop/json.lua'])],
       entry_points = {
         'console_scripts': [
-		  'hop-script = hop.hop:main'
+      'hop-python-script = hop.hop:main'
         ]
       },
       cmdclass=dict(install_data=hop_install)

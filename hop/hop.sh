@@ -16,7 +16,12 @@
 
 
 HOP_PATH=`dirname $BASH_SOURCE`
-PATH_OR_OUTPUT=`hop-script $*`
+if command -v lua &>/dev/null; then
+    PATH_OR_OUTPUT=`hop-lua-script $*`
+else
+    PATH_OR_OUTPUT=`hop-python-script $*`
+fi
+
 case $? in
   255 )
     read THE_NAME THE_PATH <<<$PATH_OR_OUTPUT

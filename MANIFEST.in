@@ -5,3 +5,5 @@ include hop/__init__.py
 include hop/hop.bash
 include hop/hop.py
 include hop/hop.sh
+include hop/hop.lua
+include hop/json.lua
