@@ -24,11 +24,15 @@ class hop_install(install_data.install_data):
   def run(self):
     install_data.install_data.run(self)
 
-    if sys.platform == "darwin":
-      bashrc_path = os.path.expanduser("~/.bash_profile")
-    else:
-      bashrc_path = os.path.expanduser("~/.bashrc")
 
+    bash_options = ('~/.bashrc', '~/.bash_profile')
+    bashrc_path = None
+    for bash in bash_options:
+      expanded = os.path.expanduser(bash)
+      if os.path.isfile(expanded):
+        bashrc_path = expanded
+        break
+    
     prefix = os.path.join(sys.prefix, 'hop')
     required_commands = {
       '/hop.bash':"# Initialize the 'hop' script\n source %s" % os.path.join(prefix, 'hop.bash'),
