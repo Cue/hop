@@ -65,7 +65,7 @@ class hop_install(install_data.install_data):
     return True
 
 
-setup(name='Cue-Hop',
+setup(name='Hop',
       version='1.0',
       description='Easily jump to your favorite directories',
       license='Apache',
