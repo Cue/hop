@@ -76,8 +76,8 @@ setup(name='Hop',
       data_files=[('hop', ['hop/hop.bash', 'hop/hop.sh', 'hop/hop.lua', 'hop/json.lua'])],
       entry_points = {
         'console_scripts': [
-      'hop-python-script = hop.hop:main'
-        ]
+          'hop-python-script = hop.hop:main'
+        ],
       },
       cmdclass=dict(install_data=hop_install)
      )
