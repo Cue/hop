@@ -300,7 +300,6 @@ class JsonDbm(object):
     """Write the file to disk"""
     with open(self._path, 'w') as f:
       f.write(json.dumps(values))
-    self._cache = None
 
 
   def __getitem__(self, item):
@@ -331,4 +330,5 @@ class JsonDbm(object):
     """Return the keys"""
     return self._cache.keys()
 
-
+if __name__ == '__main__':
+    main()
