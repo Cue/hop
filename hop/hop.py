@@ -28,11 +28,11 @@ except ImportError:
 
 def basename(path):
   """Always returns a basename, even if a path ends with a slash."""
-  (dir, basename) = os.path.split(path)
-  if basename:
-    return basename
+  (dir_, basename_) = os.path.split(path)
+  if basename_:
+    return basename_
   else:
-    return os.path.basename(dir)
+    return os.path.basename(dir_)
 
 
 def command_add_server(options, args, db):
@@ -95,13 +95,15 @@ def command_add(options, args, db):
   print "Created %d new shortcuts." % count
   return True
 
+
 def beginning_with(cmd, db):
-        """Returns a list of commands that begin with the string cmd"""
-        possibilities = [];
-        for shortcut in db.keys():
-                if shortcut.startswith(cmd):
-                        possibilities.append(shortcut)
-        return possibilities
+  """Returns a list of commands that begin with the string cmd"""
+  possibilities = []
+  for shortcut in db.keys():
+    if shortcut.startswith(cmd):
+      possibilities.append(shortcut)
+  return possibilities
+
 
 def command_hop(options, args, db):
   """Prints the name of the directory implied by the shortcut."""
@@ -151,7 +153,7 @@ def command_autocomplete(options, args, db):
   if args:
     prefix = args[-1]
   for shortcut in beginning_with(prefix, db):
-                print shortcut
+    print shortcut
   return True
 
 
@@ -196,7 +198,8 @@ def main():
                      dest="command",
                      action="append_const",
                      const="add",
-                     help="add shortcuts to the given directories.  when none are given, adds a shortcut to the current directory")
+                     help="add shortcuts to the given directories.  when none are given, adds a shortcut " +
+                      "to the current directory")
   group.add_option("--as",
                      dest="add_as",
                      help="specify a custom NAME for the new shortcut. Only works when creating only 1 shortcut.")
@@ -331,4 +334,4 @@ class JsonDbm(object):
     return self._cache.keys()
 
 if __name__ == '__main__':
-    main()
+  main()
