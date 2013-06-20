@@ -77,7 +77,14 @@ Hop.hop = function(request)
   local results = Hop.search(request)
   local value
   local key
-  for k, p in pairs(results) do key = k; value = p break end
+  -- prefer an exact match if possible
+  if results[request] ~= nil
+  then
+    key = request
+    value = results[request]
+  else
+    for k, p in pairs(results) do key = k; value = p break end
+  end
   if not (value)
   then
     print ('No value for ' .. request)

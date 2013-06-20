@@ -12,6 +12,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+# pylint: disable=C0103
+
+"""Setup script for hop."""
 
 import os.path
 import sys
@@ -20,8 +23,12 @@ from setuptools import setup
 from distutils.command import install_data
 
 
+
 class hop_install(install_data.install_data):
+  """Handle installing data for hop."""
+
   def run(self):
+    """Install commands and dotfiles."""
     install_data.install_data.run(self)
 
 
@@ -32,7 +39,7 @@ class hop_install(install_data.install_data):
       if os.path.isfile(expanded):
         bashrc_path = expanded
         break
-    
+
     prefix = os.path.join(sys.prefix, 'hop')
     required_commands = {
       '/hop.bash':"# Initialize the 'hop' script\n source %s" % os.path.join(prefix, 'hop.bash'),
@@ -64,13 +71,13 @@ setup(name='Hop',
       license='Apache',
       author='Greplin',
       author_email='robbyw@greplin.com',
-      url='http://www.github.com/Greplin/hop',
+      url='https://www.github.com/Cue/hop',
       packages=['hop'],
       data_files=[('hop', ['hop/hop.bash', 'hop/hop.sh', 'hop/hop.lua', 'hop/json.lua'])],
       entry_points = {
         'console_scripts': [
-      'hop-python-script = hop.hop:main'
-        ]
+          'hop-python-script = hop.hop:main'
+        ],
       },
       cmdclass=dict(install_data=hop_install)
      )

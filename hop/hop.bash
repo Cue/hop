@@ -28,7 +28,7 @@ case $? in
   255 )
     read THE_NAME THE_PATH <<<$PATH_OR_OUTPUT
     echo -ne "\033]0;"$THE_NAME"\007"
-    cd $THE_PATH
+    cd "$THE_PATH"
     ;;
   254 )
     read THE_NAME THE_SERVER <<<$PATH_OR_OUTPUT
